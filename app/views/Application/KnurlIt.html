@@ -1,0 +1,101 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+<h1>knurl it</h1>
+
+<form action="" method="post">
+	<p>
+		<select id="methods" name="method">
+		  <option value="GET" {{if eq .method "GET"}}selected="selected"{{end}}>GET</option>
+			<option value="HEAD" {{if eq .method "HEAD"}}selected="selected"{{end}} >HEAD</option>
+			<option value="POST" {{if eq .method "POST"}}selected="selected"{{end}} >POST</option>
+			<option value="PUT" {{if eq .method "PUT"}}selected="selected"{{end}} >PUT</option>
+			<option value="DELETE" {{if eq .method "DELETE"}}selected="selected"{{end}} >DELETE</option>
+		</select>
+		<input type="text" name="knurl" value="{{.knurl}}" class="span8"/>
+	</p>
+
+	<p id="auth-radio">
+	<label class="radio inline">
+	<input type="radio" name="auth" value="no" {{if eq .auth "no"}}checked="checked"{{end}} {{if .auth}}{{else}}checked="checked"{{end}}>
+	no auth
+	</label>
+	<label class="radio inline">
+	<input type="radio" name="auth" value="yes" {{if eq .auth "yes"}}checked="checked"{{end}}> 
+	http basic
+	</label>
+	</p>
+	
+	<div id="auth-block">
+		<input placeholder="username" type="text" name="username" value="{{$.username}}"/>
+		<input placeholder="password" type="password" name="password"/>
+	</div>
+	
+	<div id="params-block">
+		<p>
+		<strong>params</strong>
+		<a id="add-params" href="#">+ add params</a>
+		</p>
+
+		<ul id="params">
+		{{if .params}}
+			{{range $index, $p := .params}}
+				{{if $p.Name}}
+				<li id="param-{{$index}}">
+					<input placeholder="name" type="text" name="params[{{$index}}].Name" value="{{$p.Name}}"/>
+					<input placeholder="value" type="text" name="params[{{$index}}].Value" value="{{$p.Value}}"/>
+					<i class="icon-trash"></i>
+				</li>
+				{{end}}
+			{{end}}
+		{{else}}
+		<li id="param-0">
+			<input placeholder="name" type="text" name="params[0].Name"/>
+			<input placeholder="value" type="text" name="params[0].Value"/>
+			<i class="icon-trash"></i>
+		</li>
+		{{end}}
+		</ul>
+	</div>
+
+	<div id="headers-block">
+		<p>
+		<strong>headers</strong>
+		<a id="add-headers" href="#">+ add headers</a>
+		</p>
+
+		<ul id="headers">		
+		{{if .headers}}
+			{{range $index, $h := .headers}}
+			<li>
+				<input placeholder="name" type="text" name="headers[{{$index}}].Name" value="{{$h.Name}}"/>
+				<input placeholder="value" type="text" name="headers[{{$index}}].Value" value="{{$h.Value}}"/>
+				<i class="icon-trash"></i>
+			</li>
+			{{end}}
+		{{else}}
+		<li>
+			<input placeholder="name" type="text" name="headers[0].Name"/>
+			<input placeholder="value" type="text" name="headers[0].Value"/>
+			<i class="icon-trash"></i>
+		</li>
+		{{end}}
+		</ul>
+		
+	</div>
+
+	<p>
+		<input type="submit" name="submit" value="knurl it"/>
+	</p>
+</form>
+
+{{if .response}}
+<div id="response">
+	<pre>
+	{{.response}}
+	</pre>
+</div>
+{{end}}
+
+{{template "footer.html" .}}
+
