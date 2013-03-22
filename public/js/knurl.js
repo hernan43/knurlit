@@ -58,6 +58,24 @@ $(document).ready(function(){
 	$('#auth-radio input:radio').change(function(){
 	  setup_auth_form();   
   });
+
+  setup_post_body();	
+	function setup_post_body(){
+		$("#post-body").hide();
+		$("#add-body").text("+ set post body");
+	}
 	
+	$("#add-body").click(function(){
+		$("#post-body").toggle();
+		
+		if($("#post-body").is(':visible')) {
+			$("#add-body").text("- set post body");
+		} else {
+			$("#add-body").text("+ set post body");			
+		}
+		
+		$("#params").toggle();
+		$("#add-params").toggle();
+	});
 	
 });

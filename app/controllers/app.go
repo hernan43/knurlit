@@ -22,25 +22,30 @@ func (c Application) Index() revel.Result {
 	return c.Render()
 }
 
-func (c Application) KnurlIt(knurl string, method string, auth string, username string, password string, params []Param, headers []Param) revel.Result {
+func (c Application) KnurlIt(knurl string, method string, auth string, username string, password string, params []Param, postBodyString string, headers []Param) revel.Result {
 	c.RenderArgs["knurl"] = knurl
 	c.RenderArgs["method"] = method
 	c.RenderArgs["auth"] = auth
 	c.RenderArgs["username"] = username
 	c.RenderArgs["params"] = params
+	c.RenderArgs["postBodyString"] = postBodyString
 	c.RenderArgs["headers"] = headers
 	
 	if len(knurl) > 0 && len(method) > 0 {
 		postBody := new(bytes.Buffer)		
 		switch method {
 			case "POST", "PUT":
-				values := make(url.Values)
-				for _, p := range params {
-					if len(p.Name) > 0 {
-						values.Set(p.Name, p.Value)				
+				if len(postBodyString) > 0 {
+					postBody = bytes.NewBufferString(postBodyString)					
+				} else {
+					values := make(url.Values)
+					for _, p := range params {
+						if len(p.Name) > 0 {
+							values.Set(p.Name, p.Value)				
+						}
 					}
+					postBody = bytes.NewBufferString(values.Encode())					
 				}
-				postBody = bytes.NewBufferString(values.Encode())
 		}
 		
 		req, err := http.NewRequest(method, knurl, postBody)
