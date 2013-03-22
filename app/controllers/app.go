@@ -44,7 +44,11 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 		}
 		
 		req, err := http.NewRequest(method, knurl, postBody)
-		
+		switch method {
+			case "POST", "PUT":
+				req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+		}
+
 		if auth == "yes" {
 			req.SetBasicAuth(username, password)
 		}
@@ -58,6 +62,7 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 		resp, err := http.DefaultClient.Do(req) 
 		if err != nil {
 			// do something here
+			return c.Render()
 		}
 		defer resp.Body.Close()
 
