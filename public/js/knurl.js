@@ -63,6 +63,13 @@ $(document).ready(function(){
 	function setup_post_body(){
 		$("#post-body").hide();
 		$("#add-body").text("+ set post body");
+
+    if($('#post-body').val()){
+			$("#add-body").text("- set post body");
+      $("#post-body").show();
+      $("#params").hide();
+      $("#add-params").hide();
+    }
 	}
 	
 	$("#add-body").click(function(){

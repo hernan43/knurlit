@@ -14,7 +14,7 @@ type Application struct {
 }
 
 type Param struct {
-	Name string
+	Name  string
 	Value string
 }
 
@@ -30,41 +30,41 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 	c.RenderArgs["params"] = params
 	c.RenderArgs["postBodyString"] = postBodyString
 	c.RenderArgs["headers"] = headers
-	
+
 	if len(knurl) > 0 && len(method) > 0 {
-		postBody := new(bytes.Buffer)		
+		postBody := new(bytes.Buffer)
 		switch method {
-			case "POST", "PUT":
-				if len(postBodyString) > 0 {
-					postBody = bytes.NewBufferString(postBodyString)					
-				} else {
-					values := make(url.Values)
-					for _, p := range params {
-						if len(p.Name) > 0 {
-							values.Set(p.Name, p.Value)				
-						}
+		case "POST", "PUT":
+			if len(postBodyString) > 0 {
+				postBody = bytes.NewBufferString(postBodyString)
+			} else {
+				values := make(url.Values)
+				for _, p := range params {
+					if len(p.Name) > 0 {
+						values.Set(p.Name, p.Value)
 					}
-					postBody = bytes.NewBufferString(values.Encode())					
 				}
+				postBody = bytes.NewBufferString(values.Encode())
+			}
 		}
-		
+
 		req, err := http.NewRequest(method, knurl, postBody)
 		switch method {
-			case "POST", "PUT":
-				req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+		case "POST", "PUT":
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		}
 
 		if auth == "yes" {
 			req.SetBasicAuth(username, password)
 		}
-		
+
 		for _, h := range headers {
 			if len(h.Name) > 0 {
 				req.Header.Add(h.Name, h.Value)
 			}
 		}
 
-		resp, err := http.DefaultClient.Do(req) 
+		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
 			// do something here
 			return c.Render()
@@ -73,8 +73,8 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 
 		body, err := ioutil.ReadAll(resp.Body)
 		c.RenderArgs["response"] = string(body)
-		
+
 	}
-	
+
 	return c.Render()
 }

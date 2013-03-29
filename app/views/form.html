@@ -33,7 +33,7 @@
 		<a id="add-params" href="#">+ add params</a> 
 		</p>
 
-		<textarea id="post-body" class="span8" name="postBodyString" rows="5"></textarea>
+		<textarea id="post-body" class="span8" name="postBodyString" rows="5">{{.postBodyString}}</textarea>
 
 		<ul id="params">
 		{{if .params}}
@@ -72,11 +72,13 @@
 			</li>
 			{{end}}
 		{{else}}
+    <!--
 		<li>
 			<input placeholder="name" type="text" name="headers[0].Name"/>
 			<input placeholder="value" type="text" name="headers[0].Value"/>
 			<i class="icon-trash"></i>
 		</li>
+    -->
 		{{end}}
 		</ul>
 		
