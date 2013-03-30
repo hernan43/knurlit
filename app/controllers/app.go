@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"bytes"
-	// "fmt"
+	"fmt"
 	"github.com/robfig/revel"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
+  "time"
 )
 
 type Application struct {
@@ -64,7 +66,9 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 			}
 		}
 
+    begin := time.Now()
 		resp, err := http.DefaultClient.Do(req)
+    elapsed := time.Since(begin)
 		if err != nil {
 			// do something here
 			return c.Render()
@@ -72,7 +76,14 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 		defer resp.Body.Close()
 
 		body, err := ioutil.ReadAll(resp.Body)
-		c.RenderArgs["response"] = string(body)
+		var responseBuffer bytes.Buffer
+		responseBuffer.WriteString(fmt.Sprintf("%s %s\n", resp.Proto, resp.Status))
+		for k, v := range resp.Header {
+			responseBuffer.WriteString(fmt.Sprintf("%s: %s\n", k, strings.Join(v, ",")))
+		}
+		responseBuffer.WriteString(string(body))
+		c.RenderArgs["response"] = responseBuffer.String()
+		c.RenderArgs["responseTime"] = elapsed.String()
 
 	}
 

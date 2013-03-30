@@ -91,6 +91,8 @@
 
 {{if .response}}
 <div id="response">
-<pre><code class="language-markup">{{.response}}</code></pre>
+  <h3>response</h3>
+  <pre><code class="language-markup">{{.response}}</code></pre>
 </div>
+  <span class="muted pull-right">{{.responseTime}}</span>
 {{end}}
