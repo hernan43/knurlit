@@ -66,6 +66,16 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 			}
 		}
 
+		var requestBuffer bytes.Buffer
+		requestBuffer.WriteString(fmt.Sprintf("%s %s %s\n", req.Method, req.URL.Path, req.Proto))
+		requestBuffer.WriteString(fmt.Sprintf("Host: %s\n", req.Host))
+		requestBuffer.WriteString(fmt.Sprintf("Content-length: %d\n", req.ContentLength))
+		for k, v := range req.Header {
+			requestBuffer.WriteString(fmt.Sprintf("%s: %s\n", k, strings.Join(v, ",")))
+		}
+		requestBuffer.WriteString(fmt.Sprintf("\n%s\n", postBody))
+		c.RenderArgs["request"] = requestBuffer.String()
+
     begin := time.Now()
 		resp, err := http.DefaultClient.Do(req)
     elapsed := time.Since(begin)
