@@ -90,9 +90,20 @@
 </form>
 
 {{if .response}}
-<div id="response">
-  <h3>response</h3>
-  <pre><code class="language-markup">{{.response}}</code></pre>
+<ul class="nav nav-tabs" id="form_tabs">
+  <li><a data-toggle="tab" href="#request">request</a></li>
+  <li class="active"><a data-toggle="tab" href="#response">response</a></li>
+</ul>
+
+<div class="tab-content">
+  
+  <div class="tab-pane" id="request">
+  </div>
+
+  <div class="tab-pane active" id="response">
+    <small>{{.responseTime}}</small>
+    <pre><code class="language-markup">{{.response}}</code></pre>
+  </div>
+
 </div>
-  <span class="muted pull-right">{{.responseTime}}</span>
 {{end}}

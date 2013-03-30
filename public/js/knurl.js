@@ -20,6 +20,8 @@ $(document).ready(function(){
 		$(new_li).appendTo("#"+name);
 	}
 
+  $('#form_tabs a:last').tab('show');
+
 	$(document).on('click', '.icon-trash', function(){
 		$(this).parent().remove();
 	});
