@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-  "time"
+	"time"
 )
 
 type Application struct {
@@ -76,9 +76,9 @@ func (c Application) KnurlIt(knurl string, method string, auth string, username 
 		requestBuffer.WriteString(fmt.Sprintf("\n%s\n", postBody))
 		c.RenderArgs["request"] = requestBuffer.String()
 
-    begin := time.Now()
+		begin := time.Now()
 		resp, err := http.DefaultClient.Do(req)
-    elapsed := time.Since(begin)
+		elapsed := time.Since(begin)
 		if err != nil {
 			// do something here
 			return c.Render()
